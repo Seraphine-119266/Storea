@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seraphine Nexus — Không Gian Nghiên Cứu & Tri Thức</title>
+    <!-- Font chữ hiện đại & sang trọng -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;1,600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Thư viện Icon Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg-dark: #07080b;
+            --glass-bg: rgba(20, 22, 30, 0.55);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-highlight: rgba(255, 255, 255, 0.15);
+            --text-primary: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --accent-gold: #e2b857;
+            --accent-purple: #8b5cf6;
+            --accent-cyan: #06b6d4;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.15) transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            display: flex;
+        }
+
+        /* Hiệu ứng ánh sáng Aurora chuyển động mượt mà ở nền */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #0d1017 0%, #050608 100%);
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(110px);
+            opacity: 0.35;
+            animation: float 18s infinite ease-in-out alternate;
+        }
+
+        .orb-1 {
+            width: 500px; height: 500px;
+            background: var(--accent-purple);
+            top: -10%; left: 10%;
+        }
+
+        .orb-2 {
+            width: 450px; height: 450px;
+            background: var(--accent-cyan);
+            bottom: -15%; right: 5%;
+            animation-delay: -5s;
+        }
+
+        .orb-3 {
+            width: 350px; height: 350px;
+            background: var(--accent-gold);
+            top: 40%; left: 45%;
+            opacity: 0.18;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(60px, 40px) scale(1.15); }
+        }
+
+        /* Sidebar điều hướng */
+        .sidebar {
+            width: 260px;
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            background: rgba(12, 14, 20, 0.7);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-right: 1px solid var(--glass-border);
+            padding: 32px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+            margin-bottom: 40px;
+        }
+
+        .brand-logo {
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent-gold), #b48628);
+            display: flex; align-items: center; justify-content: center;
+            color: #000;
+            font-weight: 700;
+            box-shadow: 0 0 20px rgba(226, 184, 87, 0.3);
+        }
+
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #fff, #a5b4fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 13px 16px;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .nav-item.active {
+            color: #fff;
+            background: linear-gradient(90deg, rgba(226, 184, 87, 0.15) 0%, rgba(255,255,255,0.02) 100%);
+            border: 1px solid rgba(226, 184, 87, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-item.active i {
+            color: var(--accent-gold);
+        }
+
+        .user-status {
+            padding: 16px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            font-size: 0.85rem;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            margin-right: 8px;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        /* Khu vực nội dung chính */
+        .main-content {
+            margin-left: 260px;
+            flex: 1;
+            padding: 40px 56px;
+            max-width: 1400px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 36px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .header-title h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .header-title p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f3d078 0%, var(--accent-gold) 100%);
+            color: #090a0f;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(226, 184, 87, 0.25);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(226, 184, 87, 0.4);
+        }
+
+        /* Các Tab nội dung */
+        .tab-section {
+            display: none;
+            animation: fadeIn 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .tab-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Grid & Glass Cards */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 24px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 26px;
+            transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(226, 184, 87, 0.35);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.45), 0 0 20px rgba(226, 184, 87, 0.08);
+        }
+
+        .card-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(139, 92, 246, 0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            margin-bottom: 16px;
+            width: fit-content;
+        }
+
+        .card-tag.gold {
+            background: rgba(226, 184, 87, 0.12);
+            color: var(--accent-gold);
+            border-color: rgba(226, 184, 87, 0.3);
+        }
+
+        .card-tag.cyan {
+            background: rgba(6, 182, 212, 0.12);
+            color: #67e8f9;
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 12px;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.65;
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 0.82rem;
+            color: #6b7280;
+        }
+
+        .delete-btn {
+            background: transparent;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            transition: color 0.2s;
+            padding: 4px;
+        }
+
+        .delete-btn:hover {
+            color: #ef4444;
+        }
+
+        /* Khu vực Note & Soạn thảo nhanh */
+        .editor-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        input, select, textarea {
+            background: rgba(10, 11, 16, 0.65);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .input-title { flex: 2; }
+        .input-category { flex: 1; }
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        /* News Feed Reader */
+        .news-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .news-link {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .news-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive cho điện thoại */
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            .sidebar {
+                width: 100%; height: auto; position: relative;
+                flex-direction: row; align-items: center; padding: 16px 20px;
+            }
+            .brand { margin-bottom: 0; }
+            .nav-menu { flex-direction: row; overflow-x: auto; }
+            .user-status { display: none; }
+            .main-content { margin-left: 0; padding: 24px 20px; }
+            .input-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hiệu ứng ánh sáng nền -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Thanh điều hướng bên trái -->
+    <aside class="sidebar">
+        <div>
+            <div class="brand">
+                <div class="brand-logo">S</div>
+                <div class="brand-name">SERAPHINE</div>
+            </div>
+            <nav class="nav-menu">
+                <div class="nav-item active" onclick="switchTab('research', this)">
+                    <i data-lucide="microscope" size="18"></i>
+                    <span>Công trình & Topic</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('notes', this)">
+                    <i data-lucide="sparkles" size="18"></i>
+                    <span>Kiến thức & Note</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('news', this)">
+                    <i data-lucide="newspaper" size="18"></i>
+                    <span>Bảng tin & Đọc báo</span>
+                </div>
+            </nav>
+        </div>
+
+        <div class="user-status">
+            <div><span class="status-dot"></span><strong>Workspace Active</strong></div>
+            <div style="color: var(--text-secondary); margin-top: 6px; font-size: 0.78rem;">
+                Dữ liệu tự động lưu trên trình duyệt của bạn.
+            </div>
+        </div>
+    </aside>
+
+    <!-- Nội dung chính -->
+    <main class="main-content">
+        <header>
+            <div class="header-title">
+                <h1 id="page-heading">Công trình & Topic Nghiên cứu</h1>
+                <p id="page-subtitle">Lưu trữ các dự án chuyên sâu, tài liệu và đề tài đang theo đuổi.</p>
+            </div>
+            <button class="btn-primary" onclick="toggleEditor()">
+                <i data-lucide="plus" size="18"></i>
+                <span>Thêm mục mới</span>
+            </button>
+        </header>
+
+        <!-- Khung thêm dữ liệu mới (Ẩn/Hiện mượt mà) -->
+        <section id="editor-box" class="editor-container" style="display: none;">
+            <h3 style="margin-bottom: 16px; font-weight: 500; color: var(--accent-gold);">Tạo thẻ lưu trữ mới</h3>
+            <div class="input-group">
+                <input type="text" id="item-title" class="input-title" placeholder="Tiêu đề bài viết, nghiên cứu hoặc ghi chú...">
+                <select id="item-type" class="input-category">
+                    <option value="research">Danh mục: Công trình & Topic</option>
+                    <option value="notes">Danh mục: Kiến thức cần nhớ</option>
+                    <option value="news">Danh mục: Tin tức / Bài báo hay</option>
+                </select>
+            </div>
+            <input type="text" id="item-tag" style="width: 100%; margin-bottom: 16px;" placeholder="Nhãn phân loại (VD: AI, Khoa học, Tâm lý học, Link báo...)">
+            <textarea id="item-content" placeholder="Viết tóm tắt kiến thức, nội dung nghiên cứu hoặc dán đường link bài báo tại đây..."></textarea>
+            <div style="display: flex; justify-content: flex-end; gap: 12px;">
+                <button onclick="toggleEditor()" style="background: transparent; border: 1px solid var(--glass-border); color: var(--text-secondary); padding: 10px 20px; border-radius: 10px; cursor: pointer;">Hủy</button>
+                <button class="btn-primary" onclick="addNewItem()">Lưu vào không gian</button>
+            </div>
+        </section>
+
+        <!-- TAB 1: CÔNG TRÌNH & TOPIC NGHIÊN CỨU -->
+        <section id="tab-research" class="tab-section active">
+            <div class="grid-cards" id="list-research"></div>
+        </section>
+
+        <!-- TAB 2: KIẾN THỨC CẦN NHỚ & NOTE -->
+        <section id="tab-notes" class="tab-section">
+            <div class="grid-cards" id="list-notes"></div>
+        </section>
+
+        <!-- TAB 3: BẢNG TIN & ĐỌC NEWS -->
+        <section id="tab-news" class="tab-section">
+            <div class="grid-cards" id="list-news"></div>
+        </section>
+    </main>
+
+    <script>
+        // Khởi tạo icon Lucide
+        lucide.createIcons();
+
+        // Dữ liệu mẫu ban đầu để trang web nhìn đẹp ngay khi mở
+        const defaultData = [
+            {
+                id: 1,
+                type: 'research',
+                tag: 'Nghiên cứu Chuyên sâu',
+                title: 'Ứng dụng Trí tuệ Nhân tạo trong Phân tích Dữ liệu Lớn',
+                content: 'Tổng hợp các mô hình học sâu (Deep Learning) thế hệ mới, tối ưu hóa thuật toán xử lý ngôn ngữ tự nhiên và ứng dụng thực tiễn trong tự động hóa.',
+                date: '17/11/2026'
+            },
+            {
+                id: 2,
+                type: 'research',
+                tag: 'Topic Khoa học',
+                title: 'Tâm lý học Nhận thức & Cơ chế Hình thành Trí nhớ Dài hạn',
+                content: 'Nghiên cứu về phương pháp lặp lại ngắt quãng (Spaced Repetition) và cách não bộ mã hóa thông tin phức tạp thông qua sơ đồ tư duy không gian.',
+                date: '15/11/2026'
+            },
+            {
+                id: 3,
+                type: 'notes',
+                tag: 'Nguyên lý Ghi nhớ',
+                title: 'Kỹ thuật Feynman trong Học tập & Nghiên cứu',
+                content: '1. Chọn khái niệm cần hiểu.\n2. Giải thích lại bằng ngôn ngữ đơn giản nhất như đang dạy cho một đứa trẻ.\n3. Xác định lỗ hổng kiến thức và quay lại tài liệu gốc.\n4. Tinh gọn và hệ thống hóa.',
+                date: '16/11/2026'
+            },
+            {
+                id: 4,
+                type: 'notes',
+                tag: 'Tư duy Hệ thống',
+                title: 'Quy tắc 80/20 (Nguyên lý Pareto) trong Quản trị Tri thức',
+                content: '80% kết quả đột phá đến từ 20% kiến thức cốt lõi nhất. Luôn tập trung đào sâu vào nền tảng trước khi mở rộng sang các nhánh phụ.',
+                date: '12/11/2026'
+            },
+            {
+                id: 5,
+                type: 'news',
+                tag: 'Tech & Future',
+                title: 'Xu hướng Công nghệ Lượng tử và Điện toán Sinh học năm 2026',
+                content: 'Điểm tin tổng hợp các bước tiến mới nhất về chip lượng tử thương mại và khả năng lưu trữ dữ liệu trên chuỗi ADN nhân tạo.\n🔗 Nguồn: MIT Technology Review',
+                date: 'Hôm nay'
+            },
+            {
+                id: 6,
+                type: 'news',
+                tag: 'Khoa học & Đời sống',
+                title: 'Nghiên cứu mới về Nhịp sinh học và Hiệu suất Sáng tạo Ban đêm',
+                content: 'Phân tích lý do tại sao không gian yên tĩnh và ánh sáng tối giúp tăng cường khả năng kết nối các ý tưởng độc lập.\n🔗 Nguồn: Nature Journal',
+                date: '14/11/2026'
+            }
+        ];
+
+        // Lấy dữ liệu từ bộ nhớ trình duyệt hoặc dùng dữ liệu mẫu
+        let workspaceData = JSON.parse(localStorage.getItem('seraphine_workspace')) || defaultData;
+
+        function saveData() {
+            localStorage.setItem('seraphine_workspace', JSON.stringify(workspaceData));
+        }
+
+        // Hiển thị dữ liệu ra giao diện
+        function renderItems() {
+            const containers = {
+                research: document.getElementById('list-research'),
+                notes: document.getElementById('list-notes'),
+                news: document.getElementById('list-news')
+            };
+
+            containers.research.innerHTML = '';
+            containers.notes.innerHTML = '';
+            containers.news.innerHTML = '';
+
+            workspaceData.forEach(item => {
+                const tagClass = item.type === 'research' ? 'gold' : (item.type === 'news' ? 'cyan' : '');
+                const cardHTML = `
+                    <article class="glass-card">
+                        <div>
+                            <span class="card-tag ${tagClass}">${item.tag || 'Ghi chú'}</span>
+                            <h2 class="card-title">${item.title}</h2>
+                            <p class="card-desc">${item.content}</p>
+                        </div>
+                        <div class="card-footer">
+                            <span>${item.date}</span>
+                            <button class="delete-btn" onclick="deleteItem(${item.id})" title="Xóa mục này">
+                                <i data-lucide="trash-2" size="16"></i>
+                            </button>
+                        </div>
+                    </article>
+                `;
+                if (containers[item.type]) {
+                    containers[item.type].innerHTML += cardHTML;
+                }
+            });
+
+            lucide.createIcons();
+        }
+
+        // Chuyển đổi giữa các Tab
+        const tabInfo = {
+            research: {
+                title: 'Công trình & Topic Nghiên cứu',
+                subtitle: 'Lưu trữ các dự án chuyên sâu, tài liệu và đề tài đang theo đuổi.'
+            },
+            notes: {
+                title: 'Kiến thức Cần nhớ & Note',
+                subtitle: 'Sổ tay tinh gọn các nguyên lý, công thức và ý tưởng quan trọng.'
+            },
+            news: {
+                title: 'Bảng tin & Đọc News',
+                subtitle: 'Lưu trữ các bài báo giá trị, xu hướng công nghệ và tin tức chọn lọc.'
+            }
+        };
+
+        function switchTab(tabName, element) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+
+            document.getElementById('page-heading').innerText = tabInfo[tabName].title;
+            document.getElementById('page-subtitle').innerText = tabInfo[tabName].subtitle;
+            document.getElementById('item-type').value = tabName;
+        }
+
+        // Mở/Đóng khung thêm mới
+        function toggleEditor() {
+            const editor = document.getElementById('editor-box');
+            editor.style.display = editor.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Thêm bài viết/note mới
+        function addNewItem() {
+            const title = document.getElementById('item-title').value.trim();
+            const type = document.getElementById('item-type').value;
+            const tag = document.getElementById('item-tag').value.trim();
+            const content = document.getElementById('item-content').value.trim();
+
+            if (!title || !content) {
+                alert('Bạn hãy nhập đầy đủ Tiêu đề và Nội dung nhé!');
+                return;
+            }
+
+            const today = new Date();
+            const dateStr = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`;
+
+            const newItem = {
+                id: Date.now(),
+                type: type,
+                tag: tag || 'Lưu trữ',
+                title: title,
+                content: content,
+                date: dateStr
+            };
+
+            workspaceData.unshift(newItem);
+            saveData();
+            renderItems();
+
+            // Reset form
+            document.getElementById('item-title').value = '';
+            document.getElementById('item-tag').value = '';
+            document.getElementById('item-content').value = '';
+            toggleEditor();
+        }
+
+        // Xóa mục
+        function deleteItem(id) {
+            if (confirm('Bạn có chắc muốn xóa thẻ lưu trữ này không?')) {
+                workspaceData = workspaceData.filter(item => item.id !== id);
+                saveData();
+                renderItems();
+            }
+        }
+
+        // Chạy lần đầu
+        renderItems();
+    </script>
+</body>
+</html>
